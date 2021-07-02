@@ -1,0 +1,198 @@
+.border {
+    border: 1px solid #ccc
+}
+
+.banner {
+    position: relative;
+    top: 100px;
+    left: -40%;
+    width: 100%;
+    padding: 10px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
+    background: #14cc58;
+    color: #fff;
+    z-index: 100;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg)
+}
+
+.red {
+    color: #BD1A00;
+    font-weight: 600
+}
+
+.small {
+    font-size: 1.0em;
+    line-height: 1.4em;
+    margin-bottom: 1.0em
+}
+
+.wrapper {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0px auto;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3)
+}
+
+section {
+    padding: 20px;
+    margin: 0px auto;
+    position: relative;
+    transition: top 1s;
+    border-top: 1px solid #ccc;
+    clear: both;
+    background: #F9F9F9;
+    overflow: hidden
+}
+
+section:nth-child(even) {
+    background: #FFFFFF
+}
+
+section article {
+    padding: 0;
+    margin: 20px auto
+}
+
+section article.code {
+    background-color: #333;
+    color: #fff
+}
+
+section article a {
+    color: #4697bb;
+    font-weight: normal
+}
+
+section article form {
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    padding: 20px;
+    /* Wiki Edit */
+    /*width: 400px;*/
+    margin: 0 auto;
+    background: #eee
+}
+
+section article form label {
+    display: block;
+    padding: 10px 0 5px 0;
+    font-weight: 300
+}
+
+section article form input[type="text"], section article form input[type="email"], section article form input[type="tel"], section article form input[type="number"] {
+    display: block;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #dedede;
+    padding: 10px;
+    width: 94%
+}
+
+section article form input[type="submit"] {
+    background: #017ad6;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.0em;
+    font-weight: 300;
+    border: 0px;
+    margin: 10px 0 0 0
+}
+
+section article form.error-messaging label, section article form.error-messaging input, section article form.error-messaging div {
+    clear: both
+}
+
+section article form.error-messaging .ui-state-invalid input[type="text"], section article form.error-messaging .ui-state-invalid input[type="email"], section article form.error-messaging .ui-state-invalid input[type="tel"], section article form.error-messaging .ui-state-invalid input[type="number"] {
+    width: 50%;
+    float: left
+}
+
+section article form .ui-error-message {
+    width: 38%;
+    font-size: 0.8em;
+    display: inline-block;
+    float: right;
+    line-height: 1.2em
+}
+
+section .btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: 300;
+    cursor: pointer;
+    margin: 30px 10px 15px 0;
+    text-align: center;
+    background: #017ad6;
+    color: #fff
+}
+
+section .btn:hover {
+    background: #015da3
+}
+
+section.disabled article {
+    opacity: 0.3
+}
+
+section.columns {
+    background-image: url(../images/columns-03.png);
+    background-position: -40px top;
+    background-repeat: no-repeat
+}
+
+footer {
+    background-color: #282828;
+    color: #fff;
+    clear: both
+}
+
+footer a {
+    color: #4697bb;
+    font-weight: normal
+}
+
+footer article {
+    float: left;
+    width: 40%;
+    padding: 30px 50px
+}
+
+footer .copyright {
+    padding: 30px 50px;
+    font-size: 0.8em;
+    clear: both;
+    background: #222222
+}
+
+.div_RootBody {
+    padding: 20px;
+    margin: 0px auto;
+    position: relative;
+    transition: top 1s;
+    border-top: 1px solid #ccc;
+    clear: both;
+    background: #F9F9F9;
+    overflow: hidden
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
