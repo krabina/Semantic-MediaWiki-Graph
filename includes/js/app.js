@@ -35,7 +35,8 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
             break;
         default:
             colorScale = d3.scale.category20c();
-    };
+    }
+    ;
 
     var width = $(".chart")[0].clientWidth;
     var height = $(".chart")[0].clientHeight;
@@ -44,7 +45,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     var color_hash = [];
     var scale = 1;
 
-    var clickLegend = function() {
+    var clickLegend = function () {
 
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
@@ -67,8 +68,8 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         } else {
             invisibleType.push(typeValue);
         }
-        $(".node").each(function(index, el) {
-            if (el.__data__.type == typeValue) {
+        $(".node").each(function (index, el) {
+            if (el.__data__.type === typeValue) {
                 var invIndex = invisibleNode.indexOf(el.__data__.id);
                 if (invIndex > -1) {
                     invisibleNode.splice(invIndex, 1);
@@ -80,7 +81,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         });
 
-        $(".gLink").each(function(index, el) {
+        $(".gLink").each(function (index, el) {
             //      debugger;
             var valSource = el.__data__.sourceId;
             var valTarget = el.__data__.targetId;
@@ -89,13 +90,13 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
             var indexTarget = invisibleNode.indexOf(valTarget);
             var indexEdge = invisibleEdge.indexOf(valSource + "_" + valTarget + "_" + el.__data__.linkName);
 
-            if ((indexSource > -1 || indexTarget > -1) && indexEdge == -1) {
+            if ((indexSource > -1 || indexTarget > -1) && indexEdge === -1) {
                 //Einer der beiden Knoten ist unsichtbar, aber Kante noch nicht
                 $(this).toggle();
                 invisibleEdge.push(valSource + "_" + valTarget + "_" + el.__data__.linkName);
-            } else if (indexSource == -1 && indexTarget == -1 && indexEdge == -1) {
+            } else if (indexSource === -1 && indexTarget === -1 && indexEdge === -1) {
                 //Beide Knoten sind nicht unsichtbar und Kante ist nicht unsichtbar
-            } else if (indexSource == -1 && indexTarget == -1 && indexEdge > -1) {
+            } else if (indexSource === -1 && indexTarget === -1 && indexEdge > -1) {
                 //Knoten sind nicht unsichtbar, aber Kante ist es
                 $(this).toggle();
                 invisibleEdge.splice(indexEdge, 1);
@@ -105,7 +106,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     };
 
-    var typeMouseOver = function() {
+    var typeMouseOver = function () {
 
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
@@ -140,7 +141,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         var selectedFocalNodeCircle = d3.selectAll(focalNodeCircleSelector);
         //document.writeln(focalNodeCircleSelector);
         var focalNodeType = selectedFocalNodeCircle.attr("type_value");
-        if (typeValue == focalNodeType) {
+        if (typeValue === focalNodeType) {
             selectedFocalNodeCircle.style("stroke", "Maroon");
             selectedFocalNodeCircle.style("fill", "White");
         };
@@ -149,14 +150,14 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         var selectedFocalNodeText = d3.selectAll(focalNodeTextSelector);
         var focalNodeTextType = selectedFocalNodeText.attr("type_value");
         //document.writeln(pie3SliceSelector);
-        if (typeValue == focalNodeTextType) {
+        if (typeValue === focalNodeTextType) {
             selectedFocalNodeText.style("fill", "Maroon");
             selectedFocalNodeText.style("font", "bold 16px Arial")
         };
 
     };
 
-    var typeMouseOut = function() {
+    var typeMouseOut = function () {
 
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
@@ -192,10 +193,11 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         var selectedFocalNodeCircle = d3.selectAll(focalNodeCircleSelector);
         //document.writeln(focalNodeCircleSelector);
         var focalNodeType = selectedFocalNodeCircle.attr("type_value");
-        if (typeValue == focalNodeType) {
+        if (typeValue === focalNodeType) {
             selectedFocalNodeCircle.style("stroke", colorValue);
             selectedFocalNodeCircle.style("fill", "White");
-        };
+        }
+        ;
 
         var focalNodeTextSelector = "." + "focalNodeText";
         var selectedFocalNodeText = d3.selectAll(focalNodeTextSelector);
@@ -206,13 +208,13 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     };
 
 
-    var mouseClickNode = function() {
+    var mouseClickNode = function () {
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
 
-        if (!clickText && typeValue == 'Internal Link') {
+        if (!clickText && typeValue === 'Internal Link') {
             var n = thisObject[0][0].__data__.name;
-            if (done.indexOf(n) == -1) {
+            if (done.indexOf(n) === -1) {
                 askNode(n);
             }
 
@@ -222,15 +224,15 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     }
 
-    var mouseClickNodeText = function() {
+    var mouseClickNodeText = function () {
 
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
 
-        if (typeValue == 'Internal Link') {
-        //    var win = window.open("index.php/" + thisObject[0][0].__data__.hlink);
+        if (typeValue === 'Internal Link') {
+            //    var win = window.open("index.php/" + thisObject[0][0].__data__.hlink);
             var win = window.open(thisObject[0][0].__data__.hlink);
-        } else if (typeValue == 'URI') {
+        } else if (typeValue === 'URI') {
             var win = window.open(thisObject[0][0].__data__.hlink);
         }
 
@@ -238,7 +240,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     }
 
 
-    var nodeMouseOver = function() {
+    var nodeMouseOver = function () {
 
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
@@ -247,8 +249,8 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         d3.select(this).select("circle").transition()
             .duration(250)
-            .attr("r", function(d, i) {
-                if (d.id == focalNodeID) {
+            .attr("r", function (d, i) {
+                if (d.id === focalNodeID) {
                     return 65;
                 } else {
                     return 15;
@@ -273,7 +275,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     }
 
-    var nodeMouseOut = function() {
+    var nodeMouseOut = function () {
 
         var thisObject = d3.select(this);
         var typeValue = thisObject.attr("type_value");
@@ -282,8 +284,8 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         d3.select(this).select("circle").transition()
             .duration(250)
-            .attr("r", function(d, i) {
-                if (d.id == focalNodeID) {
+            .attr("r", function (d, i) {
+                if (d.id === focalNodeID) {
                     return centerNodeSize;
                 } else {
                     return nodeSize;
@@ -309,7 +311,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     }
 
     // Create a hash that maps colors to types...
-    nodeSetApp.forEach(function(d, i) {
+    nodeSetApp.forEach(function (d, i) {
         color_hash[d.type] = d.type;
         //document.writeln(color_hash[d.type]);
     });
@@ -327,13 +329,13 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     var sortedKeys = keys(color_hash).sort();
 
-    sortedKeys.forEach(function(d, i) {
+    sortedKeys.forEach(function (d, i) {
         color_hash[d] = colorScaleMW(d);
         //document.writeln(color_hash[d]);
     });
 
     // Add colors to original node records...
-    nodeSetApp.forEach(function(d, i) {
+    nodeSetApp.forEach(function (d, i) {
         d.color = color_hash[d.type];
         //document.writeln(d.type);
     });
@@ -341,7 +343,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     // Create a canvas...
     var svgCanvas = d3.select(selectString)
         .append("svg:svg")
-        .call(d3.behavior.zoom().on("zoom", function() {
+        .call(d3.behavior.zoom().on("zoom", function () {
             scale = d3.event.scale;
             svgCanvas.attr("transform", " scale(" + d3.event.scale + ")");
         }))
@@ -355,16 +357,16 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     var type_hash = [];
 
     // Create a hash that allows access to each node by its id
-    nodeSetApp.forEach(function(d, i) {
+    nodeSetApp.forEach(function (d, i) {
         node_hash[d.id] = d;
         type_hash[d.type] = d.type;
     });
 
     // Append the source object node and the target object node to each link records...
-    linkSetApp.forEach(function(d, i) {
+    linkSetApp.forEach(function (d, i) {
         d.source = node_hash[d.sourceId];
         d.target = node_hash[d.targetId];
-        if (d.sourceId == focalNodeID) {
+        if (d.sourceId === focalNodeID) {
             d.direction = "OUT";
         } else {
             d.direction = "IN";
@@ -380,7 +382,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .friction(.2)
         .linkStrength(9)
         //.size([width/8, height/10])
-        .linkDistance(function(d) {
+        .linkDistance(function (d) {
             if (width < height) {
                 return width * 1 / 3;
             } else {
@@ -397,34 +399,34 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .enter().append("g")
         .attr("class", "gLink")
         //    .attr("class", "link")
-        .attr("endNode", function(d, i) {
+        .attr("endNode", function (d, i) {
             return d.targetId;
         })
-        .attr("startNode", function(d, i) {
+        .attr("startNode", function (d, i) {
             return d.sourceId;
         })
-        .attr("targetType", function(d, i) {
+        .attr("targetType", function (d, i) {
             return d.target.type;
         })
-        .attr("sourceType", function(d, i) {
+        .attr("sourceType", function (d, i) {
             return d.source.type;
         })
         .append("line")
         .style("stroke", "#ccc")
         .style("stroke-width", "1.5px")
-        .attr("marker-end", function(d, i) {
+        .attr("marker-end", function (d, i) {
             return "url(#arrow_" + i + ")"
         })
-        .attr("x1", function(d) {
+        .attr("x1", function (d) {
             return d.source.x;
         })
-        .attr("y1", function(d) {
+        .attr("y1", function (d) {
             return d.source.y;
         })
-        .attr("x2", function(d) {
+        .attr("x2", function (d) {
             return d.target.x;
         })
-        .attr("y2", function(d) {
+        .attr("y2", function (d) {
             return d.target.y;
         });
     var clickText = false;
@@ -433,16 +435,16 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .data(force.nodes())
         .enter().append("g")
         .attr("class", "node")
-        .attr("id", function(d) {
+        .attr("id", function (d) {
             return d.id;
         })
-        .attr("type_value", function(d, i) {
+        .attr("type_value", function (d, i) {
             return d.type;
         })
-        .attr("color_value", function(d, i) {
+        .attr("color_value", function (d, i) {
             return color_hash[d.type];
         })
-        .attr("xlink:href", function(d) {
+        .attr("xlink:href", function (d) {
             return d.hlink;
         })
         //.attr("fixed", function(d) { if (d.id==focalNodeID) { return true; } else { return false; } } )
@@ -456,8 +458,8 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     node.append("circle")
         //.attr("x", function(d) { return d.x; })
         //.attr("y", function(d) { return d.y; })
-        .attr("r", function(d) {
-            if (d.id == focalNodeID) {
+        .attr("r", function (d) {
+            if (d.id === focalNodeID) {
                 return centerNodeSize;
             } else {
                 return nodeSize;
@@ -465,49 +467,49 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         })
         .style("fill", "White") // Make the nodes hollow looking
         //.style("fill", "transparent")
-        .attr("type_value", function(d, i) {
+        .attr("type_value", function (d, i) {
             return d.type;
         })
-        .attr("color_value", function(d, i) {
+        .attr("color_value", function (d, i) {
             return color_hash[d.type];
         })
         //.attr("fixed", function(d) { if (d.id==focalNodeID) { return true; } else { return false; } } )
         //.attr("x", function(d) { if (d.id==focalNodeID) { return width/2; } else { return d.x; } })
         //.attr("y", function(d) { if (d.id==focalNodeID) { return height/2; } else { return d.y; } })
-        .attr("class", function(d, i) {
+        .attr("class", function (d, i) {
             var str = d.type;
             var strippedString = str.replace(/ /g, "_")
-                //return "nodeCircle-" + strippedString; })
-            if (d.id == focalNodeID) {
+            //return "nodeCircle-" + strippedString; })
+            if (d.id === focalNodeID) {
                 return "focalNodeCircle";
             } else {
                 return "nodeCircle-" + strippedString;
             }
         })
         .style("stroke-width", 5) // Give the node strokes some thickness
-        .style("stroke", function(d, i) {
+        .style("stroke", function (d, i) {
             return color_hash[d.type];
         }) // Node stroke colors
         .call(force.drag);
 
     // Append text to Nodes
     node.append("text")
-        .attr("x", function(d) {
-            if (d.id == focalNodeID) {
+        .attr("x", function (d) {
+            if (d.id === focalNodeID) {
                 return 0;
             } else {
                 return 20;
             }
         })
-        .attr("y", function(d) {
-            if (d.id == focalNodeID) {
+        .attr("y", function (d) {
+            if (d.id === focalNodeID) {
                 return 0;
             } else {
                 return -10;
             }
         })
-        .attr("text-anchor", function(d) {
-            if (d.id == focalNodeID) {
+        .attr("text-anchor", function (d) {
+            if (d.id === focalNodeID) {
                 return "middle";
             } else {
                 return "start";
@@ -517,27 +519,27 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .attr("font-family", "Arial, Helvetica, sans-serif")
         .style("font", "normal 16px Arial")
         .attr("fill", "Blue")
-        .style("fill", function(d, i) {
+        .style("fill", function (d, i) {
             return color_hash[d];
         })
-        .attr("type_value", function(d, i) {
+        .attr("type_value", function (d, i) {
             return d.type;
         })
-        .attr("color_value", function(d, i) {
+        .attr("color_value", function (d, i) {
             return color_hash[d.type];
         })
-        .attr("class", function(d, i) {
+        .attr("class", function (d, i) {
             var str = d.type;
             var strippedString = str.replace(/ /g, "_");
             //return "nodeText-" + strippedString; })
-            if (d.id == focalNodeID) {
+            if (d.id === focalNodeID) {
                 return "focalNodeText";
             } else {
                 return "nodeText-" + strippedString;
             }
         })
         .attr("dy", ".35em")
-        .text(function(d) {
+        .text(function (d) {
             return d.name;
         });
 
@@ -546,14 +548,14 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .data(force.links())
         .append("text")
         .attr("font-family", "Arial, Helvetica, sans-serif")
-        .attr("x", function(d) {
+        .attr("x", function (d) {
             if (d.target.x > d.source.x) {
                 return (d.source.x + (d.target.x - d.source.x) / 2);
             } else {
                 return (d.target.x + (d.source.x - d.target.x) / 2);
             }
         })
-        .attr("y", function(d) {
+        .attr("y", function (d) {
             if (d.target.y > d.source.y) {
                 return (d.source.y + (d.target.y - d.source.y) / 2);
             } else {
@@ -563,39 +565,39 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .attr("fill", "Black")
         .style("font", "normal 12px Arial")
         .attr("dy", ".35em")
-        .text(function(d) {
+        .text(function (d) {
             return d.linkName;
         });
 
 
     function tick() {
         link
-            .attr("x1", function(d) {
+            .attr("x1", function (d) {
                 return d.source.x;
             })
-            .attr("y1", function(d) {
+            .attr("y1", function (d) {
                 return d.source.y;
             })
-            .attr("x2", function(d) {
+            .attr("x2", function (d) {
                 return d.target.x;
             })
-            .attr("y2", function(d) {
+            .attr("y2", function (d) {
                 return d.target.y;
             });
 
-        node.attr("cx", function(d) {
-                if (d.id == focalNodeID) {
-                    var s = 1 / scale;
-                    return d.x = Math.max(0 + 60, Math.min(s * ($(".chart")[0].clientWidth - 60), d.x));
-                } else {
-                    var s = 1 / scale;
-                    return d.x = Math.max(0 + 20, Math.min(s * ($(".chart")[0].clientWidth - 20), d.x));
-                }
+        node.attr("cx", function (d) {
+            if (d.id === focalNodeID) {
+                var s = 1 / scale;
+                return d.x = Math.max(0 + 60, Math.min(s * ($(".chart")[0].clientWidth - 60), d.x));
+            } else {
+                var s = 1 / scale;
+                return d.x = Math.max(0 + 20, Math.min(s * ($(".chart")[0].clientWidth - 20), d.x));
+            }
 
 
-            })
-            .attr("cy", function(d) {
-                if (d.id == focalNodeID) {
+        })
+            .attr("cy", function (d) {
+                if (d.id === focalNodeID) {
                     var s = 1 / scale;
                     return d.y = Math.max(0 + 60, Math.min(s * ($(".chart")[0].clientHeight - 60), d.y));
                 } else {
@@ -604,32 +606,32 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
                 }
             });
 
-        link.attr("x1", function(d) {
-                return d.source.x;
-            })
-            .attr("y1", function(d) {
+        link.attr("x1", function (d) {
+            return d.source.x;
+        })
+            .attr("y1", function (d) {
                 return d.source.y;
             })
-            .attr("x2", function(d) {
+            .attr("x2", function (d) {
                 return d.target.x;
             })
-            .attr("y2", function(d) {
+            .attr("y2", function (d) {
                 return d.target.y;
             });
 
-        node.attr("transform", function(d) {
+        node.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
 
         linkText
-            .attr("x", function(d) {
+            .attr("x", function (d) {
                 if (d.target.x > d.source.x) {
                     return (d.source.x + (d.target.x - d.source.x) / 2);
                 } else {
                     return (d.target.x + (d.source.x - d.target.x) / 2);
                 }
             })
-            .attr("y", function(d) {
+            .attr("y", function (d) {
                 if (d.target.y > d.source.y) {
                     return (d.source.y + (d.target.y - d.source.y) / 2);
                 } else {
@@ -651,14 +653,14 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     //Build the Arrows
     svgCanvas.selectAll(".gLink").append("marker")
-        .attr("id", function(d, i) {
+        .attr("id", function (d, i) {
             //  debugger;
             return "arrow_" + i;
         })
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", function(d, i) {
+        .attr("refX", function (d, i) {
             //  debugger;
-            if (d.targetId == focalNodeID) {
+            if (d.targetId === focalNodeID) {
                 return 55;
             } else {
                 return 20;
@@ -675,24 +677,24 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     svgCanvas.selectAll("focalNodeCanvas")
         .data(sortedKeys).enter().append("svg:circle") // Append circle elements
         .attr("cx", 20)
-        .attr("cy", function(d, i) {
+        .attr("cy", function (d, i) {
             return (45 + (i * 20));
         })
         .attr("stroke-width", ".5")
-        .style("fill", function(d, i) {
+        .style("fill", function (d, i) {
             return color_hash[d];
         })
         .attr("r", 6)
-        .attr("color_value", function(d, i) {
+        .attr("color_value", function (d, i) {
             return color_hash[d];
         })
-        .attr("type_value", function(d, i) {
+        .attr("type_value", function (d, i) {
             return d;
         })
-        .attr("index_value", function(d, i) {
+        .attr("index_value", function (d, i) {
             return "index-" + i;
         })
-        .attr("class", function(d) {
+        .attr("class", function (d) {
             var str = d;
             var strippedString = str.replace(/ /g, "_")
             return "legendBullet-" + strippedString;
@@ -708,24 +710,24 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .append("text")
         .attr("text-anchor", "center")
         .attr("x", 40)
-        .attr("y", function(d, i) {
+        .attr("y", function (d, i) {
             return (45 + (i * 20));
         })
         .attr("dx", 0)
         .attr("dy", "4px") // Controls padding to place text in alignment with bullets
-        .text(function(d) {
+        .text(function (d) {
             return d;
         })
-        .attr("color_value", function(d, i) {
+        .attr("color_value", function (d, i) {
             return color_hash[d];
         })
-        .attr("type_value", function(d, i) {
+        .attr("type_value", function (d, i) {
             return d;
         })
-        .attr("index_value", function(d, i) {
+        .attr("index_value", function (d, i) {
             return "index-" + i;
         })
-        .attr("class", function(d) {
+        .attr("class", function (d) {
             var str = d;
             var strippedString = str.replace(/ /g, "_")
             return "legendText-" + strippedString;
@@ -744,6 +746,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         $('#svgCanvas').width(width + 90);
         $('#svgCanvas').height(height + 60);
     }
+
     d3.select(window).on('resize.updatesvg', updateWindow);
 
 };

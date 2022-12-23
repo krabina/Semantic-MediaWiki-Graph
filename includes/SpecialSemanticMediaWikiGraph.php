@@ -1,33 +1,38 @@
 <?php
-class SpecialSemanticMediaWikiGraph extends SpecialPage {
-    function __construct() {
-        parent::__construct( 'SemanticMediaWikiGraph' );
+
+class SpecialSemanticMediaWikiGraph extends SpecialPage
+{
+    function __construct()
+    {
+        parent::__construct('SemanticMediaWikiGraph');
     }
 
-    function getGroupName() {
+    function getGroupName(): string
+    {
         return 'smw_group';
     }
 
-    function execute( $par ) {
+    function execute($par)
+    {
         global $wgOut;
         global $wgScriptPath;
         $request = $this->getRequest();
         $this->setHeaders();
-      //  $wgOut->addModules( 'ext.SemanticMediaWikiGraph.init' );
+        //  $wgOut->addModules( 'ext.SemanticMediaWikiGraph.init' );
         $html = "
 <!DOCTYPE html>
 <html>
 
 <head>
-<script src='" . $wgScriptPath . "/extensions/SemanticMediaWikiGraph/includes/js/d3_v4.min.js'></script>
-<script src='" . $wgScriptPath . "/extensions/SemanticMediaWikiGraph/includes/js/utility.js'></script>
-<script src='" . $wgScriptPath . "/extensions/SemanticMediaWikiGraph/includes/js/app.js'></script>
+<script src='{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/d3_v4.min.js'></script>
+<script src='{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/utility.js'></script>
+<script src='{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/app.js'></script>
 
-<link href='" . $wgScriptPath . "/extensions/SemanticMediaWikiGraph/includes/css/select2.css' rel='stylesheet'/>
-<link href='" . $wgScriptPath . "/extensions/SemanticMediaWikiGraph/includes/css/screen.css' rel='stylesheet'>
+<link href='{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/css/select2.css' rel='stylesheet'/>
+<link href='{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/css/screen.css' rel='stylesheet'>
 
 
-<script src='http://code.jquery.com/jquery.min.js'></script>
+<script src='https://code.jquery.com/'></script>
 </head>
     <title>Title in the Browser</title>
 <body>
@@ -60,10 +65,7 @@ class SpecialSemanticMediaWikiGraph extends SpecialPage {
 </body>
 
 
-</html>
-
-";
-
+</html>";
 
 
         $wgOut->addHTML($html);
