@@ -1,0 +1,8 @@
+{
+  "name": "Semantic-MediaWiki-Graph",
+  "version": "1.0.1",
+  "dependencies": {
+    "d3": "4.0.0",
+    "select2": "4.0.3"
+  }
+}

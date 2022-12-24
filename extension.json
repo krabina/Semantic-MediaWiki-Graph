@@ -1,0 +1,23 @@
+{
+  "name": "Semantic-MediaWiki-Graph",
+  "author": [
+    "Tobias Weller"
+  ],
+  "license-name": "Apache License 2.0",
+  "url": "https://www.mediawiki.org/wiki/Extension:Semantic_MediaWiki_Graph",
+  "descriptionmsg": "Semantic-MediaWiki-Graph",
+  "type": "parserhook",
+  "requires": {
+    "MediaWiki": ">= 1.38.0"
+  },
+  "packageFiles": [
+    "app.js",
+    "d3_v4.min.js",
+    "select2.full.min.js",
+    "utility.js"
+  ],
+  "dependencies": [
+    "mediawiki.util"
+  ],
+  "manifest_version": 1
+}

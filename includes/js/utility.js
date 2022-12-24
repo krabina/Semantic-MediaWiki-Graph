@@ -1,13 +1,10 @@
-let nodeSet = [];
-let linkSet = [];
-const invisibleNode = [];
-const invisibleEdge = [];
-const invisibleType = [];
-let done = [];
-let force;
-let focalNodeID = '';
+$.when( $.ready ).then(function()
+{
+    mw.loader.load('resources/src/mediawiki.util/util.js');
+// mw.util is finished loading, so you can now execute your JavaScript
 
-let color = [];
+let nodeSet = [], linkSet = [], invisibleNode = [], invisibleEdge = [], invisibleType = [], done = [], force,
+    focalNodeID = '', color = [];
 color['Internal Link'] = '#1f77b4';
 color.Category = '#071f55';
 color.URI = '#17a8cf';
@@ -28,15 +25,16 @@ color.Date = '#d62790';
 color.Record = '#8927d6';
 
 
+window.onload = function ()
+{
 
 
-window.onload = function() {
     loadWikiArticles();
     loadScript('select2.full.min.js');
 
 
-    $(function() {
-        $('#visualiseSite').click(function() {
+    $(function () {
+        $('#visualiseSite').click(function () {
             if ($("#wikiArticle").val() === "") {
                 //Error Message
                 $('#error_msg').show();
@@ -46,10 +44,11 @@ window.onload = function() {
             }
         });
     });
-}
+};
 
 function loadScript(name) {
-    $.getScript(wgScriptPath + '/extensions/SemanticMediaWikiGraph/includes/js/' + name, function(data, textStatus, jqxhr) {
+    $.getScript('/extensions/SemanticMediaWikiGraph/includes/js/' + name, function (data, textStatus, jqxhr)
+    {
         console.log(name + " loaded");
     });
 }
@@ -64,12 +63,12 @@ function exec(wikiArticle) {
             format: 'json'
         },
         type: 'GET',
-        success: function(data) {
+        success: function (data) {
             if (data && data.edit && data.edit.result === 'Success') {
-                debugger;
+                // debugger;
             } else if (data && data.error) {
                 alert(data);
-                debugger;
+                // debugger;
             } else {
                 nodeSet = [];
                 linkSet = [];
@@ -156,7 +155,7 @@ function getNodeTypeName(name, type) {
     let result = "";
     switch (name) {
         case "_boo":
-            result = "Boolean"
+            result = "Boolean";
             break;
         case "_cod":
             result = "Code";
@@ -231,7 +230,7 @@ function nicePropertyName(name) {
     let result = "";
     switch (name) {
         case "_boo":
-            result = "Boolean"
+            result = "Boolean";
             break;
         case "_cod":
             result = "Code";
@@ -291,17 +290,17 @@ function askNode(wikiArticle) {
             format: 'json'
         },
         type: 'GET',
-        success: function(data) {
+        success: function (data) {
             if (data && data.edit && data.edit.result === 'Success') {
-                debugger;
+                // debugger;
             } else if (data && data.error) {
                 alert(data);
-                debugger;
+                // debugger;
             } else {
                 done.push(wikiArticle);
 
                 focalNodeID = data.query.subject;
-                nodeSet.forEach(function(item) {
+                nodeSet.forEach(function (item) {
                     if (item.id === focalNodeID) {
                         item.fixed = true;
                     }
@@ -380,7 +379,7 @@ function askNode(wikiArticle) {
 function cloneNode(array) {
     const newArr = [];
 
-    array.forEach(function(item) {
+    array.forEach(function (item) {
         if (item.hlink !== 'undefined') {
             newArr.push({
                 id: item.id,
@@ -412,12 +411,12 @@ function backlinks(wikiArticle) {
             format: 'json'
         },
         type: 'GET',
-        success: function(data) {
+        success: function (data) {
             if (data && data.edit && data.edit.result === 'Success') {
-                debugger;
+                // debugger;
             } else if (data && data.error) {
                 alert(data);
-                debugger;
+                // debugger;
             } else {
                 for (let i = 0; i < data.query.backlinks.length; i++) {
 
@@ -450,7 +449,7 @@ function backlinks(wikiArticle) {
 
 function cloneEdge(array) {
     const newArr = [];
-    array.forEach(function(item) {
+    array.forEach(function (item) {
         newArr.push({
             sourceId: item.sourceId,
             linkName: item.linkName,
@@ -463,7 +462,6 @@ function cloneEdge(array) {
 
 
 function loadWikiArticles() {
-
     $.ajax({
         url: mw.util.wikiScript('api'),
         data: {
@@ -471,10 +469,9 @@ function loadWikiArticles() {
             list: 'allpages',
             aplimit: 1000,
             format: 'json'
-
         },
         type: 'GET',
-        success: function(data) {
+        success: function (data) {
             if (data && data.edit && data.edit.result === 'Success') {
 
             } else if (data && data.error) {
@@ -504,7 +501,7 @@ function colorScaleMW(type) {
 
 function hideElements() {
     const lis = $(".node");
-    $(".node").each(function(index, el) {
+    $(".node").each(function (index, el) {
         const invIndex = invisibleType.indexOf(el.__data__.type);
         if (invIndex > -1) {
             $(this).toggle();
@@ -517,7 +514,8 @@ function hideElements() {
 
     });
 
-    $(".gLink").each(function(index, el) {
+    $(".gLink").each(function (index, el)
+    {
         //      debugger;
         const valSource = el.__data__.sourceId;
         const valTarget = el.__data__.targetId;
@@ -525,7 +523,7 @@ function hideElements() {
 
         const indexSource = invisibleNode.indexOf(valSource);
         const indexTarget = invisibleNode.indexOf(valTarget);
-        var indexEdge = invisibleEdge.indexOf(valSource + "_" + valTarget + "_" + el.__data__.linkName);
+        indexEdge = invisibleEdge.indexOf(valSource + "_" + valTarget + "_" + el.__data__.linkName);
 
         if (indexEdge > -1) {
             //Einer der beiden Knoten ist unsichtbar, aber Kante noch nicht
@@ -536,6 +534,7 @@ function hideElements() {
             $(this).toggle();
             invisibleEdge.push(valSource + "_" + valTarget + "_" + el.__data__.linkName);
         }
-
     });
 }
+
+});
