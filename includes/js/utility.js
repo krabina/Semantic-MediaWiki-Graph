@@ -1,3 +1,4 @@
+
 $.when( $.ready ).then(function()
 {
     mw.loader.load('resources/src/mediawiki.util/util.js');
