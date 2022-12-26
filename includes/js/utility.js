@@ -1,9 +1,3 @@
-
-$.when( $.ready ).then(function()
-{
-    mw.loader.load('resources/src/mediawiki.util/util.js');
-// mw.util is finished loading, so you can now execute your JavaScript
-
 let nodeSet = [], linkSet = [], invisibleNode = [], invisibleEdge = [], invisibleType = [], done = [], force,
     focalNodeID = '', color = [];
 color['Internal Link'] = '#1f77b4';
@@ -537,5 +531,3 @@ function hideElements() {
         }
     });
 }
-
-});

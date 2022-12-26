@@ -18,16 +18,8 @@ class SpecialSemanticMediaWikiGraph extends SpecialPage
         global $wgScriptPath;
         $request = $this->getRequest();
         $this->setHeaders();
-        $wgOut->addModules([ 'mediawiki', 'mediawiki.base', 'mw.util' ]);
-        $wgOut->addModules([ 'ext.SemanticMediaWikiGraph' ]);
-//        $wgOut->addScriptFile("{$wgScriptPath}/resources/src/startup/mediawiki.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/resources/src/startup/mediawiki.loader.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/resources/src/startup/startup.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/resources/src/mediawiki.base/mediawiki.base.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/resources/src/mediawiki.util/util.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/d3_v4.min.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/utility.js");
-//        $wgOut->addScriptFile("{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/app.js");
+//        $wgOut->addModules([ 'mediawiki', 'mediawiki.base', 'mw.util' ]);
+        $wgOut->addModules([ 'ext.SemanticMediaWikiGraph.init' ]);
 
 
         $html = /** @lang HTML */
