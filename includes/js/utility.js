@@ -1,5 +1,13 @@
-let nodeSet = [], linkSet = [], invisibleNode = [], invisibleEdge = [], invisibleType = [], done = [], force,
-    focalNodeID = '', color = [];
+
+let nodeSet = [];
+let linkSet = [];
+const invisibleNode = [];
+const invisibleEdge = [];
+const invisibleType = [];
+let done = [];
+let force;
+let focalNodeID = '';
+const color = [];
 color['Internal Link'] = '#1f77b4';
 color.Category = '#071f55';
 color.URI = '#17a8cf';
@@ -19,17 +27,15 @@ color.Boolean = '#d62728';
 color.Date = '#d62790';
 color.Record = '#8927d6';
 
+// $("#wikiArticle").ready(() => { loadWikiArticles(); });
 
-window.onload = function ()
-{
-
-
+$(document).ready(() => {
     loadWikiArticles();
     loadScript('select2.full.min.js');
 
 
-    $(function () {
-        $('#visualiseSite').click(function () {
+    $(() => {
+        $('#visualiseSite').click(() => {
             if ($("#wikiArticle").val() === "") {
                 //Error Message
                 $('#error_msg').show();
@@ -39,12 +45,10 @@ window.onload = function ()
             }
         });
     });
-};
+});
 
 function loadScript(name) {
-    $.getScript('/extensions/SemanticMediaWikiGraph/includes/js/' + name, function (data, textStatus, jqxhr)
-    {
-        console.log(name + " loaded");
+    $.getScript(`/extensions/SemanticMediaWikiGraph/includes/js/${name}`, (data, textStatus, jqxhr) => {
     });
 }
 
@@ -58,10 +62,10 @@ function exec(wikiArticle) {
             format: 'json'
         },
         type: 'GET',
-        success: function (data) {
-            if (data && data.edit && data.edit.result === 'Success') {
+        success(data) {
+            if (data?.edit && data.edit.result === 'Success') {
                 // debugger;
-            } else if (data && data.error) {
+            } else if (data?.error) {
                 alert(data);
                 // debugger;
             } else {
@@ -75,51 +79,45 @@ function exec(wikiArticle) {
                     fixed: true,
                     x: 10,
                     y: 0,
-                    hlink: "./" + data.query.subject.split("#")[0]
+                    hlink: `./${data.query.subject.split("#")[0]}`
                 });
                 focalNodeID = data.query.subject;
-                for (let i = 0; i < data.query.data.length; i++) {
+                for (const item of data.query.data) {
 
-                    const item = data.query.data[i];
-
-                    if (item.property !== "_SKEY" && item.property !== "_MDAT" && item.property !== "_ASK") {
+                    if (!["_SKEY", "_MDAT", "_ASK"].includes(item.property)) {
                         if (item.dataitem[0].item === data.query.subject) {
-                            item.dataitem[0].item = item.dataitem[0].item + "_" + item.property;
+                            item.dataitem[0].item = `${item.dataitem[0].item}_${item.property}`;
                         }
                         for (let j = 0; j < item.dataitem.length; j++) {
                             const type = getNodeTypeName(item.property, item.dataitem[j].type);
                             if (type === 'Boolean') {
-                                if (item.dataitem[j].item === 't') {
-                                    item.dataitem[j].item = 'true';
-                                } else {
-                                    item.dataitem[j].item = 'false';
-                                }
+                                item.dataitem[j].item = item.dataitem[j].item === 't' ? 'true' : 'false';
                             }
                             if (type === 'URI') {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.split("#")[0].replace("_", " "),
-                                    type: type,
+                                    type,
                                     hlink: item.dataitem[0].item
                                 });
                             } else if (type === "Internal Link") {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.split("#")[0].replace("_", " "),
-                                    type: type,
-                                    hlink: "./" + item.dataitem[j].item.split("#")[0]
+                                    type,
+                                    hlink: `./${item.dataitem[j].item.split("#")[0]}`
                                 });
                             } else if (type === "Date") {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.substring(2),
-                                    type: type,
+                                    type,
                                 });
                             } else {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.split("#")[0].replace("_", " "),
-                                    type: type,
+                                    type,
                                     //hlink: "./" + item.dataitem[0].item
                                 });
                             }
@@ -137,7 +135,7 @@ function exec(wikiArticle) {
                 //und Ask wer hierhin zeigt?
                 $('#cluster_chart .chart').empty();
                 drawCluster('Drawing1', focalNodeID, nodeSet, linkSet, '#cluster_chart .chart', 'colorScale20');
-                const elem = $('[id=' + focalNodeID + '] a');
+                const elem = $(`[id=${focalNodeID}] a`);
                 elem[0].__data__.px = $(".chart")[0].clientWidth / 2;
                 elem[0].__data__.py = $(".chart")[0].clientHeight / 2;
             }
@@ -147,132 +145,89 @@ function exec(wikiArticle) {
 }
 
 function getNodeTypeName(name, type) {
-    let result = "";
     switch (name) {
         case "_boo":
-            result = "Boolean";
-            break;
+            return "Boolean";
         case "_cod":
-            result = "Code";
-            break;
+            return "Code";
         case "_dat":
-            result = "Date";
-            break;
+            return "Date";
         case "_ema":
-            result = "Email";
-            break;
+            return "Email";
         case "_num":
-            result = "Number"; //oder Email //oder Telefon
-            break;
+            return "Number"; //oder Email //oder Telefon
         case "_qty":
-            result = "Quantity";
-            break;
+            return "Quantity";
         case "_rec":
-            result = "Record";
-            break;
+            return "Record";
         case "_tem":
-            result = "Temperature";
-            break;
+            return "Temperature";
         case "_uri":
-            result = "URI";
-            break;
+            return "URI";
         case "_wpg":
-            result = "Internal Link";
-            break;
+            return "Internal Link";
         case "Monolingual":
-            result = "Monolingual Text";
-            break;
+            return "Monolingual Text";
         case "Telephone":
-            result = "Telephone";
-            break;
+            return "Telephone";
         case "_TEXT":
-            result = "Text";
-            break;
+            return "Text";
         case "_INST":
-            result = "Category";
-            break;
+            return "Category";
         default:
             switch (type) {
                 case 1:
-                    result = "Number";
-                    break;
+                    return "Number";
                 case 2:
-                    result = "Text";
-                    break;
+                    return "Text";
                 case 4:
-                    result = "Boolean";
-                    break;
+                    return "Boolean";
                 case 5:
-                    result = "URI"; //oder Email //oder Telefon
-                    break;
+                    return "URI"; //oder Email //oder Telefon
                 case 6:
-                    result = "Date";
-                    break;
+                    return "Date";
                 case 9:
-                    result = "Internal Link";
-                    break;
+                    return "Internal Link";
                 default:
-                    result = "Unknown Type";
+                    return "Unknown Type";
             }
     }
-
-
-    return result;
 }
 
 
 function nicePropertyName(name) {
-    let result = "";
     switch (name) {
         case "_boo":
-            result = "Boolean";
-            break;
+            return "Boolean";
         case "_cod":
-            result = "Code";
-            break;
+            return "Code";
         case "_dat":
-            result = "Date";
-            break;
+            return "Date";
         case "_ema":
-            result = "Email";
-            break;
+            return "Email";
         case "_num":
-            result = "Number"; //oder Email //oder Telefon
-            break;
+            return "Number"; //oder Email //oder Telefon
         case "_qty":
-            result = "Quantity";
-            break;
+            return "Quantity";
         case "_rec":
-            result = "Record";
-            break;
+            return "Record";
         case "_tem":
-            result = "Temperature";
-            break;
+            return "Temperature";
         case "_uri":
-            result = "URI";
-            break;
+            return "URI";
         case "_wpg":
-            result = "Internal Link";
-            break;
+            return "Internal Link";
         case "Monolingual":
-            result = "Monolingual Text";
-            break;
+            return "Monolingual Text";
         case "Telephone":
-            result = "Telephone";
-            break;
+            return "Telephone";
         case "_TEXT":
-            result = "Text";
-            break;
+            return "Text";
         case "_INST":
-            result = "isA";
-            break;
+            return "isA";
         default:
-            result = name.replace("_", " ");
-            break;
+            return name.replace("_", " ");
     }
-
-
-    return result;
 }
 
 
@@ -285,63 +240,57 @@ function askNode(wikiArticle) {
             format: 'json'
         },
         type: 'GET',
-        success: function (data) {
-            if (data && data.edit && data.edit.result === 'Success') {
+        success(data) {
+            if (data?.edit && data.edit.result === 'Success') {
                 // debugger;
-            } else if (data && data.error) {
+            } else if (data?.error) {
                 alert(data);
                 // debugger;
             } else {
                 done.push(wikiArticle);
 
                 focalNodeID = data.query.subject;
-                nodeSet.forEach(function (item) {
+                nodeSet.forEach((item) => {
                     if (item.id === focalNodeID) {
                         item.fixed = true;
                     }
                 });
-                for (let i = 0; i < data.query.data.length; i++) {
-
-                    var item = data.query.data[i];
+                for (const item of data.query.data) {
 
                     if (item.property.indexOf("_") !== 0) {
                         if (item.dataitem[0].item === data.query.subject) {
-                            item.dataitem[0].item = item.dataitem[0].item + "_" + item.property;
+                            item.dataitem[0].item = `${item.dataitem[0].item}_${item.property}`;
                         }
                         for (let j = 0; j < item.dataitem.length; j++) {
                             const type = getNodeTypeName(item.property, item.dataitem[j].type);
                             if (type === 'Boolean') {
-                                if (item.dataitem[j].item === 't') {
-                                    item.dataitem[j].item = 'true';
-                                } else {
-                                    item.dataitem[j].item = 'false';
-                                }
+                                item.dataitem[j].item = item.dataitem[j].item === 't' ? 'true' : 'false';
                             }
                             if (type === 'URI') {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.split("#")[0].replace("_", " "),
-                                    type: type,
+                                    type,
                                     hlink: item.dataitem[0].item
                                 });
                             } else if (type === "Internal Link") {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.split("#")[0].replace("_", " "),
-                                    type: type,
-                                    hlink: "./" + item.dataitem[0].item
+                                    type,
+                                    hlink: `./${item.dataitem[0].item}`
                                 });
                             } else if (type === "Date") {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.substring(2),
-                                    type: type,
+                                    type,
                                 });
                             } else {
                                 nodeSet.push({
                                     id: item.dataitem[j].item,
                                     name: item.dataitem[j].item.split("#")[0].replace("_", " "),
-                                    type: type,
+                                    type,
                                     //hlink: "./" + item.dataitem[0].item
                                 });
                             }
@@ -374,7 +323,7 @@ function askNode(wikiArticle) {
 function cloneNode(array) {
     const newArr = [];
 
-    array.forEach(function (item) {
+    array.forEach((item) => {
         if (item.hlink !== 'undefined') {
             newArr.push({
                 id: item.id,
@@ -406,17 +355,15 @@ function backlinks(wikiArticle) {
             format: 'json'
         },
         type: 'GET',
-        success: function (data) {
-            if (data && data.edit && data.edit.result === 'Success') {
+        success(data) {
+            if (data?.edit && data.edit.result === 'Success') {
                 // debugger;
-            } else if (data && data.error) {
+            } else if (data?.error) {
                 alert(data);
                 // debugger;
             } else {
-                for (let i = 0; i < data.query.backlinks.length; i++) {
-
-                    const item = data.query.backlinks[i];
-                    nodeSet.push({
+                for (const item of data.query.backlinks) {
+nodeSet.push({
                         id: item.title,
                         name: item.title,
                         type: 'Unknown',
@@ -444,7 +391,7 @@ function backlinks(wikiArticle) {
 
 function cloneEdge(array) {
     const newArr = [];
-    array.forEach(function (item) {
+    array.forEach((item) => {
         newArr.push({
             sourceId: item.sourceId,
             linkName: item.linkName,
@@ -466,25 +413,19 @@ function loadWikiArticles() {
             format: 'json'
         },
         type: 'GET',
-        success: function (data) {
-            if (data && data.edit && data.edit.result === 'Success') {
-
-            } else if (data && data.error) {
-
-
-            } else {
-
-                const dataArray = data.query.allpages;
-                for (let i = 0; i < dataArray.length; i++) {
-                    $('#wikiArticle').append('<option value="' + dataArray[i].title + '">' + dataArray[i].title + "</option>");
-                }
-
-                $("#wikiArticle").select2({
-                    placeholder: "Select a Wiki Article",
-                    allowClear: true
-                });
-
+        success(data) {
+            if (!(!(data?.edit && data.edit.result === 'Success') && !(data?.error))) {
+                return;
             }
+            const dataArray = data.query.allpages;
+            for (const dataElement of dataArray) {
+                $('#wikiArticle').append(`<option value="${dataElement.title}">${dataElement.title}</option>`);
+            }
+
+            $("#wikiArticle").select2({
+                placeholder: "Select a Wiki Article",
+                allowClear: true
+            });
         }
     });
 }
@@ -495,15 +436,15 @@ function colorScaleMW(type) {
 
 
 function hideElements() {
-    const lis = $(".node");
     $(".node").each(function (index, el) {
         const invIndex = invisibleType.indexOf(el.__data__.type);
-        if (invIndex > -1) {
-            $(this).toggle();
-            const invIndexNode = invisibleNode.indexOf(el.__data__.id);
-            if (invIndexNode === -1) {
-                invisibleNode.push(el.__data__.id);
-            }
+        if (!(invIndex > -1)) {
+            return;
+        }
+        $(this).toggle();
+        const invIndexNode = invisibleNode.indexOf(el.__data__.id);
+        if (invIndexNode === -1) {
+            invisibleNode.push(el.__data__.id);
         }
 
 
@@ -514,11 +455,11 @@ function hideElements() {
         //      debugger;
         const valSource = el.__data__.sourceId;
         const valTarget = el.__data__.targetId;
-        var indexEdge = invisibleEdge.indexOf(valSource + "_" + valTarget + "_" + el.__data__.linkName);
+        let indexEdge = invisibleEdge.indexOf(`${valSource}_${valTarget}_${el.__data__.linkName}`);
 
         const indexSource = invisibleNode.indexOf(valSource);
         const indexTarget = invisibleNode.indexOf(valTarget);
-        indexEdge = invisibleEdge.indexOf(valSource + "_" + valTarget + "_" + el.__data__.linkName);
+        indexEdge = invisibleEdge.indexOf(`${valSource}_${valTarget}_${el.__data__.linkName}`);
 
         if (indexEdge > -1) {
             //Einer der beiden Knoten ist unsichtbar, aber Kante noch nicht
@@ -527,7 +468,7 @@ function hideElements() {
         } else if ((indexSource > -1 || indexTarget > -1)) {
             //Knoten sind nicht unsichtbar, aber Kante ist es
             $(this).toggle();
-            invisibleEdge.push(valSource + "_" + valTarget + "_" + el.__data__.linkName);
+            invisibleEdge.push(`${valSource}_${valTarget}_${el.__data__.linkName}`);
         }
     });
 }

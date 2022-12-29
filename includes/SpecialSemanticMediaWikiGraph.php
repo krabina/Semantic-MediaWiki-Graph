@@ -20,6 +20,7 @@ class SpecialSemanticMediaWikiGraph extends SpecialPage
         $this->setHeaders();
 //        $wgOut->addModules([ 'mediawiki', 'mediawiki.base', 'mw.util' ]);
         $wgOut->addModules([ 'ext.SemanticMediaWikiGraph.init' ]);
+        $wgOut->addScriptFile("{$wgScriptPath}/extensions/SemanticMediaWikiGraph/includes/js/d3_v4.min.js");
 
 
         $html = /** @lang HTML */

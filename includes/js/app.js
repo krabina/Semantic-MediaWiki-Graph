@@ -57,11 +57,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         const thisObject = d3.select(this);
         const typeValue = thisObject.attr("type_value");
-        const strippedTypeValue = typeValue.replace(/ /g, "_");
-        const colorValue = thisObject.attr("color_value");
-        const k = d3.selectAll(".node [type_value='" + typeValue + "']");
 
-        const legendBulletSelector = `.legendBullet-${strippedTypeValue}`;
         //    var selectedBullet = d3.selectAll(legendBulletSelector);
         //  selectedBullet.style("fill", "none");
         //    selectedBullet.style("stroke", colorValue);
@@ -77,15 +73,16 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
             invisibleType.push(typeValue);
         }
         $(".node").each(function (index, el) {
-            if (el.__data__.type === typeValue) {
-                const invIndex = invisibleNode.indexOf(el.__data__.id);
-                if (invIndex > -1) {
-                    invisibleNode.splice(invIndex, 1);
-                } else {
-                    invisibleNode.push(el.__data__.id);
-                }
-                $(this).toggle();
+            if (el.__data__.type !== typeValue) {
+                return;
             }
+            const invIndex = invisibleNode.indexOf(el.__data__.id);
+            if (invIndex > -1) {
+                invisibleNode.splice(invIndex, 1);
+            } else {
+                invisibleNode.push(el.__data__.id);
+            }
+            $(this).toggle();
 
         });
 
@@ -177,26 +174,26 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         selectedBullet.style("fill", colorValue);
         selectedBullet.attr("r", 6);
 
-        const legendTextSelector = "." + "legendText-" + strippedTypeValue;
+        const legendTextSelector = `.legendText-${strippedTypeValue}`;
         const selectedLegendText = d3.selectAll(legendTextSelector);
         //document.writeln(legendBulletSelector);
         selectedLegendText.style("font", "normal 14px Arial")
         selectedLegendText.style("fill", "Black");
 
-        const nodeTextSelector = "." + "nodeText-" + strippedTypeValue;
+        const nodeTextSelector = `.nodeText-${strippedTypeValue}`;
         const selectedNodeText = d3.selectAll(nodeTextSelector);
         //document.writeln(pie3SliceSelector);
         selectedNodeText.style("font", "normal 16px Arial")
         selectedNodeText.style("fill", "Blue");
 
-        const nodeCircleSelector = "." + "nodeCircle-" + strippedTypeValue;
+        const nodeCircleSelector = `.nodeCircle-${strippedTypeValue}`;
         const selectedCircle = d3.selectAll(nodeCircleSelector);
         //document.writeln(nodeCircleSelector);
         selectedCircle.style("fill", "White");
         selectedCircle.style("stroke", colorValue);
         selectedCircle.attr("r", nodeSize);
 
-        const focalNodeCircleSelector = "." + "focalNodeCircle";
+        const focalNodeCircleSelector = ".focalNodeCircle";
         const selectedFocalNodeCircle = d3.selectAll(focalNodeCircleSelector);
         //document.writeln(focalNodeCircleSelector);
         const focalNodeType = selectedFocalNodeCircle.attr("type_value");
@@ -205,7 +202,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
             selectedFocalNodeCircle.style("fill", "White");
         }
 
-        const focalNodeTextSelector = "." + "focalNodeText";
+        const focalNodeTextSelector = ".focalNodeText";
         const selectedFocalNodeText = d3.selectAll(focalNodeTextSelector);
         //document.writeln(pie3SliceSelector);
         selectedFocalNodeText.style("fill", "Blue");
@@ -220,7 +217,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         if (!clickText && typeValue === 'Internal Link') {
             const n = thisObject[0][0].__data__.name;
-            if (done.indexOf(n) === -1) {
+            if (!done.includes(n)) {
                 askNode(n);
             }
 
@@ -251,30 +248,23 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         const thisObject = d3.select(this);
         const typeValue = thisObject.attr("type_value");
-        const colorValue = thisObject.attr("color_value");
         const strippedTypeValue = typeValue.replace(/ /g, "_");
 
         d3.select(this).select("circle").transition()
             .duration(250)
-            .attr("r", function (d, i) {
-                if (d.id === focalNodeID) {
-                    return 65;
-                } else {
-                    return 15;
-                }
-            });
+            .attr("r", (d, i) => d.id === focalNodeID ? 65 : 15);
         d3.select(this).select("text").transition()
             .duration(250)
             .style("font", "bold 20px Arial")
             .attr("fill", "Blue");
 
-        const legendBulletSelector = "." + "legendBullet-" + strippedTypeValue;
+        const legendBulletSelector = `.legendBullet-${strippedTypeValue}`;
         const selectedBullet = d3.selectAll(legendBulletSelector);
         //document.writeln(legendBulletSelector);
         selectedBullet.style("fill", "Maroon");
         selectedBullet.attr("r", 1.2 * 6);
 
-        const legendTextSelector = "." + "legendText-" + strippedTypeValue;
+        const legendTextSelector = `.legendText-${strippedTypeValue}`;
         const selectedLegendText = d3.selectAll(legendTextSelector);
         //document.writeln(legendBulletSelector);
         selectedLegendText.style("font", "bold 14px Arial");
@@ -291,25 +281,19 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
         d3.select(this).select("circle").transition()
             .duration(250)
-            .attr("r", function (d, i) {
-                if (d.id === focalNodeID) {
-                    return centerNodeSize;
-                } else {
-                    return nodeSize;
-                }
-            });
+            .attr("r", (d, i) => d.id === focalNodeID ? centerNodeSize : nodeSize);
         d3.select(this).select("text").transition()
             .duration(250)
             .style("font", "normal 16px Arial")
             .attr("fill", "Blue");
 
-        const legendBulletSelector = "." + "legendBullet-" + strippedTypeValue;
+        const legendBulletSelector = `.legendBullet-${strippedTypeValue}`;
         const selectedBullet = d3.selectAll(legendBulletSelector);
         //document.writeln(legendBulletSelector);
         selectedBullet.style("fill", colorValue);
         selectedBullet.attr("r", 6);
 
-        const legendTextSelector = "." + "legendText-" + strippedTypeValue;
+        const legendTextSelector = `.legendText-${strippedTypeValue}`;
         const selectedLegendText = d3.selectAll(legendTextSelector);
         //document.writeln(legendBulletSelector);
         selectedLegendText.style("font", "normal 14px Arial");
@@ -317,7 +301,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     };
 
     // Create a hash that maps colors to types...
-    nodeSetApp.forEach(function (d, i) {
+    nodeSetApp.forEach((d, i) => {
         color_hash[d.type] = d.type;
         //document.writeln(color_hash[d.type]);
     });
@@ -325,7 +309,7 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     function keys(obj) {
         const keys = [];
 
-        for (let key in obj) {
+        for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
                 keys.push(key);
             }
@@ -335,20 +319,20 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     const sortedKeys = keys(color_hash).sort();
 
-    sortedKeys.forEach(function (d, i) {
+    sortedKeys.forEach((d, i) => {
         color_hash[d] = colorScaleMW(d);
         //document.writeln(color_hash[d]);
     });
 
     // Add colors to original node records...
-    nodeSetApp.forEach(function (d, i) {
+    nodeSetApp.forEach((d, i) => {
         d.color = color_hash[d.type];
         //document.writeln(d.type);
     });
 
     const svgCanvas = d3.select(selectString)
         .append("svg:svg")
-        .call(d3.zoom().on("zoom", function () {
+        .call(d3.zoom().on("zoom", () => {
             scale = d3.event.transform.k;
             svgCanvas.attr("transform", d3.event.transform);
         }))
@@ -359,24 +343,20 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .attr("class", "focalNodeCanvas");
 
 
-    let node_hash = [];
-    let type_hash = [];
+    const node_hash = [];
+    const type_hash = [];
 
     // Create a hash that allows access to each node by its id
-    nodeSetApp.forEach(function (d, i) {
+    nodeSetApp.forEach((d, i) => {
         node_hash[d.id] = d;
         type_hash[d.type] = d.type;
     });
 
     // Append the source object node and the target object node to each link records...
-    linkSetApp.forEach(function (d, i) {
+    linkSetApp.forEach((d, i) => {
         d.source = node_hash[d.sourceId];
         d.target = node_hash[d.targetId];
-        if (d.sourceId === focalNodeID) {
-            d.direction = "OUT";
-        } else {
-            d.direction = "IN";
-        }
+        d.direction = d.sourceId === focalNodeID ? "OUT" : "IN";
     });
 
     // Create a force layout and bind Nodes and Links
@@ -386,14 +366,8 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .force("charge", d3.forceManyBody().strength(-1000))
         .force("gravity", d3.forceManyBody().strength(.01))
         .force("friction", d3.forceManyBody().strength(.2))
-        .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(9))
-        .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function (d) {
-            if (width < height) {
-                return width * 1 / 3;
-            } else {
-                return height * 1 / 3
-            }
-        }))
+        .force("link", d3.forceLink().id((d) => d.id).strength(9))
+        .force("link", d3.forceLink().id((d) => d.id).distance((d) => width < height ? width * 1 / 3 : height * 1 / 3))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .on("tick", () => { tick(); })
         .start();
@@ -405,54 +379,28 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .enter().append("g")
         .attr("class", "gLink")
         //    .attr("class", "link")
-        .attr("endNode", function (d, i) {
-            return d.targetId;
-        })
-        .attr("startNode", function (d, i) {
-            return d.sourceId;
-        })
-        .attr("targetType", function (d, i) {
-            return d.target.type;
-        })
-        .attr("sourceType", function (d, i) {
-            return d.source.type;
-        })
+        .attr("endNode", (d, i) => d.targetId)
+        .attr("startNode", (d, i) => d.sourceId)
+        .attr("targetType", (d, i) => d.target.type)
+        .attr("sourceType", (d, i) => d.source.type)
         .append("line")
         .style("stroke", "#ccc")
         .style("stroke-width", "1.5px")
-        .attr("marker-end", function (d, i) {
-            return "url(#arrow_" + i + ")"
-        })
-        .attr("x1", function (d) {
-            return d.source.x;
-        })
-        .attr("y1", function (d) {
-            return d.source.y;
-        })
-        .attr("x2", function (d) {
-            return d.target.x;
-        })
-        .attr("y2", function (d) {
-            return d.target.y;
-        });
+        .attr("marker-end", (d, i) => `url(#arrow_${i})`)
+        .attr("x1", (d) => d.source.x)
+        .attr("y1", (d) => d.source.y)
+        .attr("x2", (d) => d.target.x)
+        .attr("y2", (d) => d.target.y);
     let clickText = false;
     // Create Nodes
     const node = svgCanvas.selectAll(".node")
         .data(force.nodes())
         .enter().append("g")
         .attr("class", "node")
-        .attr("id", function (d) {
-            return d.id;
-        })
-        .attr("type_value", function (d, i) {
-            return d.type;
-        })
-        .attr("color_value", function (d, i) {
-            return color_hash[d.type];
-        })
-        .attr("xlink:href", function (d) {
-            return d.hlink;
-        })
+        .attr("id", (d) => d.id)
+        .attr("type_value", (d, i) => d.type)
+        .attr("color_value", (d, i) => color_hash[d.type])
+        .attr("xlink:href", (d) => d.hlink)
         //.attr("fixed", function(d) { if (d.id==focalNodeID) { return true; } else { return false; } } )
         .on("mouseover", nodeMouseOver)
         .on("click", mouseClickNode)
@@ -464,186 +412,98 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     node.append("circle")
         //.attr("x", function(d) { return d.x; })
         //.attr("y", function(d) { return d.y; })
-        .attr("r", function (d) {
-            if (d.id === focalNodeID) {
-                return centerNodeSize;
-            } else {
-                return nodeSize;
-            }
-        })
+        .attr("r", (d) => d.id === focalNodeID ? centerNodeSize : nodeSize)
         .style("fill", "White") // Make the nodes hollow looking
         //.style("fill", "transparent")
-        .attr("type_value", function (d, i) {
-            return d.type;
-        })
-        .attr("color_value", function (d, i) {
-            return color_hash[d.type];
-        })
+        .attr("type_value", (d, i) => d.type)
+        .attr("color_value", (d, i) => color_hash[d.type])
         //.attr("fixed", function(d) { if (d.id==focalNodeID) { return true; } else { return false; } } )
         //.attr("x", function(d) { if (d.id==focalNodeID) { return width/2; } else { return d.x; } })
         //.attr("y", function(d) { if (d.id==focalNodeID) { return height/2; } else { return d.y; } })
-        .attr("class", function (d, i) {
+        .attr("class", (d, i) => {
             const str = d.type;
             const strippedString = str.replace(/ /g, "_");
             //return "nodeCircle-" + strippedString; })
-            if (d.id === focalNodeID) {
-                return "focalNodeCircle";
-            } else {
-                return "nodeCircle-" + strippedString;
-            }
+            return d.id === focalNodeID ? "focalNodeCircle" : `nodeCircle-${strippedString}`;
         })
         .style("stroke-width", 5) // Give the node strokes some thickness
-        .style("stroke", function (d, i) {
-            return color_hash[d.type];
-        }) // Node stroke colors
+        .style("stroke", (d, i) => color_hash[d.type]) // Node stroke colors
         .call(force.drag);
 
     // Append text to Nodes
     node.append("text")
-        .attr("x", function (d) {
-            if (d.id === focalNodeID) {
-                return 0;
-            } else {
-                return 20;
-            }
+        .attr("x", (d) => d.id === focalNodeID ? 0 : 20)
+        .attr("y", (d) => {
+            return d.id === focalNodeID ? 0 : -10;
         })
-        .attr("y", function (d) {
-            if (d.id === focalNodeID) {
-                return 0;
-            } else {
-                return -10;
-            }
-        })
-        .attr("text-anchor", function (d) {
-            if (d.id === focalNodeID) {
-                return "middle";
-            } else {
-                return "start";
-            }
-        })
+        .attr("text-anchor", (d) => d.id === focalNodeID ? "middle" : "start")
         .on("click", mouseClickNodeText)
         .attr("font-family", "Arial, Helvetica, sans-serif")
         .style("font", "normal 16px Arial")
         .attr("fill", "Blue")
-        .style("fill", function (d, i) {
-            return color_hash[d];
-        })
-        .attr("type_value", function (d, i) {
-            return d.type;
-        })
-        .attr("color_value", function (d, i) {
-            return color_hash[d.type];
-        })
-        .attr("class", function (d, i) {
+        .style("fill", (d, i) => color_hash[d])
+        .attr("type_value", (d, i) => d.type)
+        .attr("color_value", (d, i) => color_hash[d.type])
+        .attr("class", (d, i) => {
             const str = d.type;
             const strippedString = str.replace(/ /g, "_");
             //return "nodeText-" + strippedString; })
-            if (d.id === focalNodeID) {
-                return "focalNodeText";
-            } else {
-                return "nodeText-" + strippedString;
-            }
+            return d.id === focalNodeID ? "focalNodeText" : `nodeText-${strippedString}`;
         })
         .attr("dy", ".35em")
-        .text(function (d) {
-            return d.name;
-        });
+        .text((d) => d.name);
 
     // Append text to Link edges
     const linkText = svgCanvas.selectAll(".gLink")
         .data(force.links())
         .append("text")
         .attr("font-family", "Arial, Helvetica, sans-serif")
-        .attr("x", function (d) {
-            if (d.target.x > d.source.x) {
-                return (d.source.x + (d.target.x - d.source.x) / 2);
-            } else {
-                return (d.target.x + (d.source.x - d.target.x) / 2);
-            }
-        })
-        .attr("y", function (d) {
-            if (d.target.y > d.source.y) {
-                return (d.source.y + (d.target.y - d.source.y) / 2);
-            } else {
-                return (d.target.y + (d.source.y - d.target.y) / 2);
-            }
-        })
+        .attr("x", (d) => d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2))
+        .attr("y", (d) => d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2))
         .attr("fill", "Black")
         .style("font", "normal 12px Arial")
         .attr("dy", ".35em")
-        .text(function (d) {
-            return d.linkName;
-        });
+        .text((d) => d.linkName);
 
 
     function tick() {
         link
-            .attr("x1", function (d) {
-                return d.source.x;
-            })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            });
+            .attr("x1", (d) => d.source.x)
+            .attr("y1", (d) => d.source.y)
+            .attr("x2", (d) => d.target.x)
+            .attr("y2", (d) => d.target.y);
 
-        node.attr("cx", function (d) {
+        node.attr("cx", (d) => {
             if (d.id === focalNodeID) {
-                let s = 1 / scale;
+                const s = 1 / scale;
                 return d.x = Math.max(60, Math.min(s * ($(".chart")[0].clientWidth - 60), d.x));
             } else {
-                let s = 1 / scale;
+                const s = 1 / scale;
                 return d.x = Math.max(20, Math.min(s * ($(".chart")[0].clientWidth - 20), d.x));
             }
 
 
         })
-            .attr("cy", function (d) {
+            .attr("cy", (d) => {
                 if (d.id === focalNodeID) {
-                    let s = 1 / scale;
+                    const s = 1 / scale;
                     return d.y = Math.max(60, Math.min(s * ($(".chart")[0].clientHeight - 60), d.y));
                 } else {
-                    let s = 1 / scale;
+                    const s = 1 / scale;
                     return d.y = Math.max(20, Math.min(s * ($(".chart")[0].clientHeight - 20), d.y));
                 }
             });
 
-        link.attr("x1", function (d) {
-            return d.source.x;
-        })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            });
+        link.attr("x1", (d) => d.source.x)
+            .attr("y1", (d) => d.source.y)
+            .attr("x2", (d) => d.target.x)
+            .attr("y2", (d) => d.target.y);
 
-        node.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
+        node.attr("transform", (d) => `translate(${d.x},${d.y})`);
 
         linkText
-            .attr("x", function (d) {
-                if (d.target.x > d.source.x) {
-                    return (d.source.x + (d.target.x - d.source.x) / 2);
-                } else {
-                    return (d.target.x + (d.source.x - d.target.x) / 2);
-                }
-            })
-            .attr("y", function (d) {
-                if (d.target.y > d.source.y) {
-                    return (d.source.y + (d.target.y - d.source.y) / 2);
-                } else {
-                    return (d.target.y + (d.source.y - d.target.y) / 2);
-                }
-            });
+            .attr("x", (d) => d.target.x > d.source.x ? (d.source.x + (d.target.x - d.source.x) / 2) : (d.target.x + (d.source.x - d.target.x) / 2))
+            .attr("y", (d) => d.target.y > d.source.y ? (d.source.y + (d.target.y - d.source.y) / 2) : (d.target.y + (d.source.y - d.target.y) / 2));
     }
 
 
@@ -659,20 +519,9 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
 
     //Build the Arrows
     svgCanvas.selectAll(".gLink").append("marker")
-        .attr("id", function (d, i) {
-            //  debugger;
-            return "arrow_" + i;
-        })
+        .attr("id", (d, i) => `arrow_${i}`)
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", function (d, i) {
-            //  debugger;
-            if (d.targetId === focalNodeID) {
-                return 55;
-            } else {
-                return 20;
-            }
-
-        })
+        .attr("refX", (d, i) => d.targetId === focalNodeID ? 55 : 20)
         .attr("refY", 0)
         .attr("markerWidth", 8)
         .attr("markerHeight", 8)
@@ -683,26 +532,16 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
     svgCanvas.selectAll("focalNodeCanvas")
         .data(sortedKeys).enter().append("svg:circle") // Append circle elements
         .attr("cx", 20)
-        .attr("cy", function (d, i) {
-            return (45 + (i * 20));
-        })
+        .attr("cy", (d, i) => (45 + (i * 20)))
         .attr("stroke-width", ".5")
-        .style("fill", function (d, i) {
-            return color_hash[d];
-        })
+        .style("fill", (d, i) => color_hash[d])
         .attr("r", 6)
-        .attr("color_value", function (d, i) {
-            return color_hash[d];
-        })
-        .attr("type_value", function (d, i) {
-            return d;
-        })
-        .attr("index_value", function (d, i) {
-            return "index-" + i;
-        })
-        .attr("class", function (d) {
+        .attr("color_value", (d, i) => color_hash[d])
+        .attr("type_value", (d, i) => d)
+        .attr("index_value", (d, i) => `index-${i}`)
+        .attr("class", (d) => {
             const strippedString = d.replace(/ /g, "_");
-            return "legendBullet-" + strippedString;
+            return `legendBullet-${strippedString}`;
         })
         .on('mouseover', typeMouseOver)
         .on("mouseout", typeMouseOut)
@@ -715,26 +554,16 @@ function drawCluster(drawingName, focalNode, nodeSetApp, linkSetApp, selectStrin
         .append("text")
         .attr("text-anchor", "center")
         .attr("x", 40)
-        .attr("y", function (d, i) {
-            return (45 + (i * 20));
-        })
+        .attr("y", (d, i) => (45 + (i * 20)))
         .attr("dx", 0)
         .attr("dy", "4px") // Controls padding to place text in alignment with bullets
-        .text(function (d) {
-            return d;
-        })
-        .attr("color_value", function (d, i) {
-            return color_hash[d];
-        })
-        .attr("type_value", function (d, i) {
-            return d;
-        })
-        .attr("index_value", function (d, i) {
-            return "index-" + i;
-        })
-        .attr("class", function (d) {
+        .text((d) => d)
+        .attr("color_value", (d, i) => color_hash[d])
+        .attr("type_value", (d, i) => d)
+        .attr("index_value", (d, i) => `index-${i}`)
+        .attr("class", (d) => {
             const strippedString = d.replace(/ /g, "_");
-            return "legendText-" + strippedString;
+            return `legendText-${strippedString}`;
         })
         .style("fill", "Black")
         .style("font", "normal 14px Arial")
