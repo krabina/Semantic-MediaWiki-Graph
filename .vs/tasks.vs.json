@@ -1,0 +1,20 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-node_modules",
+      "appliesTo": "node_modules/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-nodeconsoleproject1",
+      "appliesTo": "nodeconsoleproject1/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-utility",
+      "appliesTo": "includes/js/utility.ts",
+      "type": "launch"
+    }
+  ]
+}
